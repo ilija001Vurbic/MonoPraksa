@@ -1,0 +1,19 @@
+﻿using CarDealership.Model.Common;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace CarDealership.Model
+{
+    public class CarModel:ICarModelCommon
+    {
+        public int Id { get; set; }
+        public int ManufacturerId { get; set; }
+        public string Model { get; set; }
+        public string Engine { get; set; }
+        public int Price { get; set; }
+        public string BodyType { get; set; }
+    }
+}
