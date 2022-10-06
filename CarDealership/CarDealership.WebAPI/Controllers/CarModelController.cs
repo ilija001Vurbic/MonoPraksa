@@ -25,13 +25,24 @@ namespace CarDealership.WebAPI.Controllers
             models = service.GetAllModels();
             return Request.CreateResponse(HttpStatusCode.OK, models);
         }
-        public CarModel GetModelById(int id)
+        public HttpResponseMessage GetModelById(int id)
         {
-            return service.GetModelById(id);
+            CarModel model = new CarModel();
+            if (model == null)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound, id);
+            }
+            model = service.GetModelById(id);
+            return Request.CreateResponse(HttpStatusCode.OK, model);
         }
-        public void DeleteModel(CarModel model)
+        public HttpResponseMessage DeleteModel(CarModel model)
         {
-            service.DeleteCarModel(model);
+            if (model == null)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound);
+            }
+            service.DeleteCarManufacturer(model);
+            return Request.CreateResponse(HttpStatusCode.OK, model);
         }
         public HttpResponseMessage PutModel(int id, CarModel model)
         {

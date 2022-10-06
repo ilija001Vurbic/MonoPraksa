@@ -42,13 +42,18 @@ namespace CarDealership.Repository
         public CarManufacturer GetManufacturerById(int id)
         {
             CarManufacturer manufacturer = new CarManufacturer();
-            if (manufacturer == null)
+            using (SqlConnection con = new SqlConnection(connString))
             {
-
+                using (SqlCommand cmd = new SqlCommand("SELECT * FROM CarManufacturer WHERE id=@id)", con))
+                {
+                    cmd.Parameters.AddWithValue("@id", $"{manufacturer.Id}");
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                    con.Close();
+                    return manufacturer;
+                }
             }
-            return null;
         }
-
 
         public CarManufacturer PostCarManufacturer(CarManufacturer manufacturer)
         {
@@ -67,14 +72,36 @@ namespace CarDealership.Repository
             }
         }
         
-        public void PutCarManufacturer(int id, CarManufacturer manufacturer)
+        public CarManufacturer PutCarManufacturer(int id, CarManufacturer manufacturer)
         {
-
+            id = manufacturer.Id;
+            using (SqlConnection con = new SqlConnection(connString))
+            {
+                using (SqlCommand cmd = new SqlCommand("UPDATE CarManufacturer SET manufacturer=@manufactuere,country=@country WHERE id=@id)", con))
+                {
+                    cmd.Parameters.AddWithValue("@id", $"{id}");
+                    cmd.Parameters.AddWithValue("@manufacturer", $"{manufacturer.Name}");
+                    cmd.Parameters.AddWithValue("@country", $"{manufacturer.Country}");
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                    con.Close();
+                    return manufacturer;
+                }
+            }
         }
         
         public void DeleteCarManufacturer(CarManufacturer manufacturer)
         {
-
+            using (SqlConnection con = new SqlConnection(connString))
+            {
+                using (SqlCommand cmd = new SqlCommand("DELETE FROM CarManufacturer WHERE id=@id)", con))
+                {
+                    cmd.Parameters.AddWithValue("@id", $"{manufacturer.Id}");
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                    con.Close();
+                }
+            }
         }
         
     }

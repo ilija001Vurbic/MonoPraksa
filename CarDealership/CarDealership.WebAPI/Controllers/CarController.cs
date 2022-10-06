@@ -25,9 +25,15 @@ namespace CarDealership.WebAPI.Controllers
             manufacturers = service.GetAllManufacturers();
             return Request.CreateResponse(HttpStatusCode.OK, manufacturers);
         }
-        public CarManufacturer GetManufacturerById(int id)
+        public HttpResponseMessage GetManufacturerById(int id)
         {
-            return service.GetManufacturerById(id);
+            CarManufacturer manufacturer = new CarManufacturer();
+            if (manufacturer == null)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound,id);
+            }
+            manufacturer = service.GetManufacturerById(id);
+            return Request.CreateResponse(HttpStatusCode.OK, manufacturers);
         }
 
         public HttpResponseMessage PostManufacturer(CarManufacturer manufacturer)
@@ -41,14 +47,25 @@ namespace CarDealership.WebAPI.Controllers
             
         }
         
-        public void PutManufacturer(int id, CarManufacturer manufacturer)
+        public HttpResponseMessage PutManufacturer(int id, CarManufacturer manufacturer)
         {
-            service.PutCarManufacturer(id, manufacturer);
+            CarManufacturer manufacturer = new CarManufacturer();
+            if (manufacturer == null)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound,id);
+            }
+            manufacturer = service.PutCarManufacturer(id,manufacturer);
+            return Request.CreateResponse(HttpStatusCode.OK, manufacturer);
         }
         
-        public void DeleteManufacturer(CarManufacturer manufacturer)
+        public HttpResponseMessage DeleteManufacturer(CarManufacturer manufacturer)
         {
+            if(manufacturer == null)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound);
+            }
             service.DeleteCarManufacturer(manufacturer);
+            return Request.CreateResponse(HttpStatusCode.OK, manufacturer);
         }
 
     }

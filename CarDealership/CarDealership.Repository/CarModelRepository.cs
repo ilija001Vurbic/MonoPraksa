@@ -44,7 +44,18 @@ namespace CarDealership.Repository
         }
         public CarModel GetModelById(int id)
         {
-            return null;
+            CarModel model = new CarModel();
+            using (SqlConnection con = new SqlConnection(connString))
+            {
+                using (SqlCommand cmd = new SqlCommand("SELECT * FROM CarModel WHERE id=@id)", con))
+                {
+                    cmd.Parameters.AddWithValue("@id", $"{model.Id}");
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                    con.Close();
+                    return model;
+                }
+            }
         }
         public CarModel PostCarModel(CarModel model)
         {
@@ -87,7 +98,16 @@ namespace CarDealership.Repository
         }
         public void DeleteCarModel(CarModel model)
         {
-
+            using (SqlConnection con = new SqlConnection(connString))
+            {
+                using (SqlCommand cmd = new SqlCommand("DELETE FROM CarModel WHERE id=@id)", con))
+                {
+                    cmd.Parameters.AddWithValue("@id", $"{model.Id}");
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                    con.Close();                
+                }
+            }
         }
     }
 }
