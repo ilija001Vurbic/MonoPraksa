@@ -13,24 +13,26 @@ namespace CarDealership.Service
     public class CarModelService:ICarModelService
     {
         CarModelRepository repository = new CarModelRepository();
-        public List<CarModel> GetAllModels()
+        public async Task<List<CarModel>> GetAllModels()
         {
-            return repository.GetAllModels();
+            List<CarModel> models = await repository.GetAllModels();
+            return models;
         }
 
-        public CarModel GetModelById(int id)
+        public async Task<CarModel> GetModelById(int id)
         {
-            return repository.GetModelById(id);
+            CarModel model = await repository.GetModelById(id);
+            return model;
         }
-        public void PostCarModel(CarModel model)
+        public async Task PostCarModel(CarModelRest model)
         {
             repository.PostCarModel(model);
         }
-        public void PutCarModel(int id, CarModel model)
+        public async Task PutCarModel(int id, CarModel model)
         {
             repository.PutCarModel(id, model);
         }
-        public void DeleteCarModel(CarModel model)
+        public async Task DeleteCarModel(CarModel model)
         {
             repository.DeleteCarModel(model);
         }

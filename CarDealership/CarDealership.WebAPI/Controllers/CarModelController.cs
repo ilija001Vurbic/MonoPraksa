@@ -5,9 +5,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
+using HttpDeleteAttribute = System.Web.Http.HttpDeleteAttribute;
+using HttpGetAttribute = System.Web.Http.HttpGetAttribute;
+using HttpPostAttribute = System.Web.Http.HttpPostAttribute;
+using HttpPutAttribute = System.Web.Http.HttpPutAttribute;
 
 namespace CarDealership.WebAPI.Controllers
 {
@@ -15,27 +20,43 @@ namespace CarDealership.WebAPI.Controllers
     {
         // GET: CarModel
         CarModelService service = new CarModelService();
-        public HttpResponseMessage GetModels()
+        [HttpGet]
+        public async Task<HttpResponseMessage> GetModels()
         {
-            List<CarModel> models = new List<CarModel>();
+            List<CarModel> models = await service.GetAllModels();
+            List<CarModelRest> modelsRest = MapToRest(models);
             if (models == null)
             {
                 return Request.CreateResponse(HttpStatusCode.NotFound);
             }
-            models = service.GetAllModels();
-            return Request.CreateResponse(HttpStatusCode.OK, models);
+            return Request.CreateResponse(HttpStatusCode.OK, modelsRest);
         }
-        public HttpResponseMessage GetModelById(int id)
+        public List<CarModelRest> MapToRest(List<CarModel> models)
         {
-            CarModel model = new CarModel();
+            List<CarModelRest> modelsRest = new List<CarModelRest>();
+            if (models == null)
+            {
+                return null;
+            }
+            foreach (CarModel model in models)
+            {
+                CarModelRest modelRest = new CarModelRest(model.Id, model.ManufacturerId, model.Model, model.Engine, model.Price);
+                modelsRest.Add(modelRest);
+            }
+            return modelsRest;
+        }
+        [HttpGet]
+        public async Task<HttpResponseMessage> GetModelById(int id)
+        {
+            CarModel model = await service.GetModelById(id);
             if (model == null)
             {
                 return Request.CreateResponse(HttpStatusCode.NotFound, id);
             }
-            model = service.GetModelById(id);
             return Request.CreateResponse(HttpStatusCode.OK, model);
         }
-        public HttpResponseMessage DeleteModel(CarModel model)
+        [HttpDelete]
+        public async Task<HttpResponseMessage> DeleteModel(CarModel model)
         {
             if (model == null)
             {
@@ -44,7 +65,8 @@ namespace CarDealership.WebAPI.Controllers
             service.DeleteCarModel(model);
             return Request.CreateResponse(HttpStatusCode.OK, model);
         }
-        public HttpResponseMessage PutModel(int id, CarModel model)
+        [HttpPut]
+        public async Task<HttpResponseMessage> PutModel(int id, CarModel model)
         {
             if (model == null)
             {
@@ -53,14 +75,16 @@ namespace CarDealership.WebAPI.Controllers
             service.PutCarModel(id,model);
             return Request.CreateResponse(HttpStatusCode.OK, model);
         }
-        public HttpResponseMessage PostModel(CarModel model)
+        [HttpPost]
+        public async Task<HttpResponseMessage> PostModel(CarModelRest modelRest)
         {
-            if (model == null)
+            if (modelRest == null)
             {
                 return Request.CreateResponse(HttpStatusCode.NotFound);
             }
-            service.PostCarModel(model);
-            return Request.CreateResponse(HttpStatusCode.OK, model);
+            service.PostCarModel(modelRest);
+            return Request.CreateResponse(HttpStatusCode.OK, modelRest);
         }
+       
     }
 }

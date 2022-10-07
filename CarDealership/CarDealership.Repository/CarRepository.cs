@@ -14,7 +14,7 @@ namespace CarDealership.Repository
     {
         string connString = @"Server=ST-01;Initial Catalog=master;Trusted_connection=true;";
         List<CarManufacturer> manufacturers = new List<CarManufacturer>();
-        public List<CarManufacturer> GetAllManufacturers()
+        public async Task<List<CarManufacturer>> GetAllManufacturers()
         {
             using (SqlConnection con = new SqlConnection(connString))
             {
@@ -39,7 +39,7 @@ namespace CarDealership.Repository
                 }
             }
         }
-        public CarManufacturer GetManufacturerById(int id)
+        public async Task<CarManufacturer> GetManufacturerById(int id)
         {
             CarManufacturer manufacturer = new CarManufacturer();
             using (SqlConnection con = new SqlConnection(connString))
@@ -48,6 +48,18 @@ namespace CarDealership.Repository
                 {
                     cmd.Parameters.AddWithValue("@id", $"{manufacturer.Id}");
                     con.Open();
+                    using (SqlDataReader sdr = cmd.ExecuteReader())
+                    {
+                        while (sdr.Read())
+                        {
+                            manufacturers.Add(new CarManufacturer
+                            {
+                                Id = Convert.ToInt32(sdr["id"]),
+                                Name = sdr["manufacturer"].ToString(),
+                                Country = sdr["country"].ToString()
+                            });
+                        }
+                    }
                     cmd.ExecuteNonQuery();
                     con.Close();
                     return manufacturer;
@@ -55,7 +67,7 @@ namespace CarDealership.Repository
             }
         }
 
-        public CarManufacturer PostCarManufacturer(CarManufacturer manufacturer)
+        public async Task<CarManufacturer> PostCarManufacturer(CarManufacturer manufacturer)
         {
             using (SqlConnection con = new SqlConnection(connString))
             {
@@ -72,7 +84,7 @@ namespace CarDealership.Repository
             }
         }
         
-        public CarManufacturer PutCarManufacturer(int id, CarManufacturer manufacturer)
+        public async Task<CarManufacturer> PutCarManufacturer(int id, CarManufacturer manufacturer)
         {
             id = manufacturer.Id;
             using (SqlConnection con = new SqlConnection(connString))
@@ -90,7 +102,7 @@ namespace CarDealership.Repository
             }
         }
         
-        public void DeleteCarManufacturer(CarManufacturer manufacturer)
+        public async Task DeleteCarManufacturer(CarManufacturer manufacturer)
         {
             using (SqlConnection con = new SqlConnection(connString))
             {

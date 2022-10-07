@@ -9,10 +9,10 @@ namespace CarDealership.Service.Common
 {
     public interface ICarService
     {
-        List<CarManufacturer> GetAllManufacturers();
-        CarManufacturer GetManufacturerById(int id);
-        void PostCarManufacturer(CarManufacturer manufacturer);
-        void PutCarManufacturer(int id, CarManufacturer manufacturer);
-        void DeleteCarManufacturer(CarManufacturer manufacturer);
+        Task<List<CarManufacturer>> GetAllManufacturers();
+        Task<CarManufacturer> GetManufacturerById(int id);
+        Task PostCarManufacturer(CarManufacturer manufacturer);
+        Task PutCarManufacturer(int id, CarManufacturer manufacturer);
+        Task DeleteCarManufacturer(CarManufacturer manufacturer);
     }
 }

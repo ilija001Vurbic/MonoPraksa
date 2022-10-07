@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="CarManufacturer.cs" />
     <Compile Include="CarModel.cs" />
+    <Compile Include="CarModelRest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

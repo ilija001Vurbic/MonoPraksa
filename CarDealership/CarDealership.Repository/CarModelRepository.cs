@@ -13,7 +13,7 @@ namespace CarDealership.Repository
     public class CarModelRepository : ICarModelRepositoryCommon
     {
         string connString = @"Server=ST-01;Initial Catalog=master;Trusted_connection=true;";
-        public List<CarModel> GetAllModels()
+        public async Task<List<CarModel>> GetAllModels()
         {
             using (SqlConnection con = new SqlConnection(connString))
             {
@@ -42,7 +42,7 @@ namespace CarDealership.Repository
                 }
             }
         }
-        public CarModel GetModelById(int id)
+        public async Task<CarModel> GetModelById(int id)
         {
             CarModel model = new CarModel();
             using (SqlConnection con = new SqlConnection(connString))
@@ -57,18 +57,18 @@ namespace CarDealership.Repository
                 }
             }
         }
-        public CarModel PostCarModel(CarModel model)
+        public async Task<CarModel> PostCarModel(CarModelRest modelRest)
         {
+            CarModel model = new CarModel(modelRest.Id,modelRest.ManufacturerId,modelRest.Model,modelRest.Engine,modelRest.Price,null);
             using (SqlConnection con = new SqlConnection(connString))
             {
-                using (SqlCommand cmd = new SqlCommand("INSERT INTO CarModel VALUES (@id,@manufacturerId,@model,@engine,@price,@bodyType)", con))
+                using (SqlCommand cmd = new SqlCommand("INSERT INTO CarModel VALUES (@id,@manufacturerId,@model,@engine,@price)", con))
                 {
                     cmd.Parameters.AddWithValue("@id", $"{model.Id}");
                     cmd.Parameters.AddWithValue("@manufacturerId", $"{model.ManufacturerId}");
                     cmd.Parameters.AddWithValue("@model", $"{model.Model}");
                     cmd.Parameters.AddWithValue("@engine", $"{model.Engine}");
                     cmd.Parameters.AddWithValue("@price", $"{model.Price}");
-                    cmd.Parameters.AddWithValue("@bodyType", $"{model.BodyType}");
                     con.Open();
                     cmd.ExecuteNonQuery();
                     con.Close();
@@ -76,7 +76,7 @@ namespace CarDealership.Repository
                 }
             }
         }
-        public CarModel PutCarModel(int id, CarModel model)
+        public async Task<CarModel> PutCarModel(int id, CarModel model)
         {
             id = model.Id;
             using (SqlConnection con = new SqlConnection(connString))
@@ -96,7 +96,7 @@ namespace CarDealership.Repository
                 }
             }
         }
-        public void DeleteCarModel(CarModel model)
+        public async Task DeleteCarModel(CarModel model)
         {
             using (SqlConnection con = new SqlConnection(connString))
             {

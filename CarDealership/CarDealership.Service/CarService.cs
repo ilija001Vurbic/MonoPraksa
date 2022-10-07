@@ -12,28 +12,28 @@ namespace CarDealership.Service
     public class CarService:ICarService
     {
         CarRepository repository = new CarRepository();
-        public List<CarManufacturer> GetAllManufacturers() {
-            List<CarManufacturer> manufacturers = new List<CarManufacturer>();
-            manufacturers = repository.GetAllManufacturers();
+        public async Task<List<CarManufacturer>> GetAllManufacturers() {
+            List<CarManufacturer> manufacturers = await repository.GetAllManufacturers();
             return manufacturers;
         }
 
-        public CarManufacturer GetManufacturerById(int id)
+        public async Task<CarManufacturer> GetManufacturerById(int id)
         {
-            return repository.GetManufacturerById(id);
+            CarManufacturer manufacturer=await repository.GetManufacturerById(id);
+            return manufacturer;
         }
         
-        public void PostCarManufacturer(CarManufacturer manufacturer)
+        public async Task PostCarManufacturer(CarManufacturer manufacturer)
         {
             repository.PostCarManufacturer(manufacturer);
         }
        
-        public void PutCarManufacturer(int id, CarManufacturer manufacturer)
+        public async Task PutCarManufacturer(int id, CarManufacturer manufacturer)
         {
             repository.PutCarManufacturer(id, manufacturer);
         }
        
-        public void DeleteCarManufacturer(CarManufacturer manufacturer)
+        public async Task DeleteCarManufacturer(CarManufacturer manufacturer)
         {
             repository.DeleteCarManufacturer(manufacturer);
         }

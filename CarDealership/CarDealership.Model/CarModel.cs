@@ -9,6 +9,21 @@ namespace CarDealership.Model
 {
     public class CarModel:ICarModelCommon
     {
+        private object p;
+
+        public CarModel(int id, int manufacturerId, string model, string engine, int price, object p)
+        {
+            Id = id;
+            ManufacturerId = manufacturerId;
+            Model = model;
+            Engine = engine;
+            Price = price;
+            this.p = p;
+        }
+        public CarModel()
+        {
+
+        }
         public int Id { get; set; }
         public int ManufacturerId { get; set; }
         public string Model { get; set; }

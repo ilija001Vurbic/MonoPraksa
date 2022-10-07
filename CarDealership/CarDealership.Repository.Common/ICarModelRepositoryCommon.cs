@@ -9,10 +9,10 @@ namespace CarDealership.Repository.Common
 {
     public interface ICarModelRepositoryCommon
     {
-        List<CarModel> GetAllModels();
-        CarModel GetModelById(int id);
-        CarModel PostCarModel(CarModel model);
-        CarModel PutCarModel(int id, CarModel model);
-        void DeleteCarModel(CarModel model);
+        Task<List<CarModel>> GetAllModels();
+        Task<CarModel> GetModelById(int id);
+        Task<CarModel> PostCarModel(CarModelRest modelRest);
+        Task<CarModel> PutCarModel(int id, CarModel model);
+        Task DeleteCarModel(CarModel model);
     }
 }

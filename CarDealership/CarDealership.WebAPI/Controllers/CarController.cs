@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
@@ -15,28 +16,26 @@ namespace CarDealership.WebAPI.Controllers
     public class CarController : ApiController
     {
         CarService service = new CarService();
-        public HttpResponseMessage GetManufacturers()
+        public async Task<HttpResponseMessage> GetManufacturers()
         {
-            List<CarManufacturer> manufacturers = new List<CarManufacturer>();
+            List<CarManufacturer> manufacturers = await service.GetAllManufacturers();
             if (manufacturers == null)
             {
                 return Request.CreateResponse(HttpStatusCode.NotFound);
             }
-            manufacturers = service.GetAllManufacturers();
             return Request.CreateResponse(HttpStatusCode.OK, manufacturers);
         }
-        public HttpResponseMessage GetManufacturerById(int id)
+        public async Task<HttpResponseMessage> GetManufacturerById(int id)
         {
-            CarManufacturer manufacturer = new CarManufacturer();
+            CarManufacturer manufacturer = await service.GetManufacturerById(id);
             if (manufacturer == null)
             {
                 return Request.CreateResponse(HttpStatusCode.NotFound,id);
             }
-            manufacturer = service.GetManufacturerById(id);
             return Request.CreateResponse(HttpStatusCode.OK, manufacturer);
         }
 
-        public HttpResponseMessage PostManufacturer(CarManufacturer manufacturer)
+        public async Task<HttpResponseMessage> PostManufacturer(CarManufacturer manufacturer)
         {
             if (manufacturer == null)
             {
@@ -47,7 +46,7 @@ namespace CarDealership.WebAPI.Controllers
             
         }
         
-        public HttpResponseMessage PutManufacturer(int id, CarManufacturer manufacturer)
+        public async Task<HttpResponseMessage> PutManufacturer(int id, CarManufacturer manufacturer)
         {
             if (manufacturer == null)
             {
@@ -57,7 +56,7 @@ namespace CarDealership.WebAPI.Controllers
             return Request.CreateResponse(HttpStatusCode.OK, manufacturer);
         }
         
-        public HttpResponseMessage DeleteManufacturer(CarManufacturer manufacturer)
+        public async Task<HttpResponseMessage> DeleteManufacturer(CarManufacturer manufacturer)
         {
             if(manufacturer == null)
             {
