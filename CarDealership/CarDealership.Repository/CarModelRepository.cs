@@ -13,6 +13,7 @@ namespace CarDealership.Repository
     public class CarModelRepository : ICarModelRepositoryCommon
     {
         string connString = @"Server=ST-01;Initial Catalog=master;Trusted_connection=true;";
+        
         public async Task<List<CarModel>> GetAllModels()
         {
             using (SqlConnection con = new SqlConnection(connString))
@@ -44,14 +45,29 @@ namespace CarDealership.Repository
         }
         public async Task<CarModel> GetModelById(int id)
         {
-            CarModel model = new CarModel();
             using (SqlConnection con = new SqlConnection(connString))
             {
                 using (SqlCommand cmd = new SqlCommand("SELECT * FROM CarModel WHERE id=@id", con))
                 {
-                    cmd.Parameters.AddWithValue("@id", $"{model.Id}");
+                    CarModel model = new CarModel();
+                    cmd.CommandType = CommandType.Text;
+                    cmd.Parameters.AddWithValue("@id", id);
                     con.Open();
-                    cmd.ExecuteNonQuery();
+                    using (SqlDataReader sdr = cmd.ExecuteReader())
+                    {
+                        while (sdr.Read())
+                        {
+                            model=new CarModel
+                            {
+                                Id = Convert.ToInt32(sdr["id"]),
+                                ManufacturerId = Convert.ToInt32(sdr["manufacturerId"]),
+                                Model = sdr["model"].ToString(),
+                                Engine = sdr["engine"].ToString(),
+                                Price = Convert.ToInt32(sdr["price"]),
+                                BodyType = sdr["bodyType"].ToString(),
+                            };
+                        }
+                    }
                     con.Close();
                     return model;
                 }

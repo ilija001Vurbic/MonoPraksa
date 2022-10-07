@@ -41,26 +41,26 @@ namespace CarDealership.Repository
         }
         public async Task<CarManufacturer> GetManufacturerById(int id)
         {
-            CarManufacturer manufacturer = new CarManufacturer();
             using (SqlConnection con = new SqlConnection(connString))
             {
                 using (SqlCommand cmd = new SqlCommand("SELECT * FROM CarManufacturer WHERE id=@id", con))
                 {
-                    cmd.Parameters.AddWithValue("@id", $"{manufacturer.Id}");
+                    CarManufacturer manufacturer = new CarManufacturer();
+                    cmd.CommandType = CommandType.Text;
+                    cmd.Parameters.AddWithValue("@id", id);
                     con.Open();
                     using (SqlDataReader sdr = cmd.ExecuteReader())
                     {
                         while (sdr.Read())
                         {
-                            manufacturers.Add(new CarManufacturer
+                            manufacturer=new CarManufacturer
                             {
                                 Id = Convert.ToInt32(sdr["id"]),
                                 Name = sdr["manufacturer"].ToString(),
                                 Country = sdr["country"].ToString()
-                            });
+                            };
                         }
                     }
-                    cmd.ExecuteNonQuery();
                     con.Close();
                     return manufacturer;
                 }

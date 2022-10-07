@@ -51,7 +51,7 @@ namespace CarDealership.WebAPI.Controllers
             CarModel model = await service.GetModelById(id);
             if (model == null)
             {
-                return Request.CreateResponse(HttpStatusCode.NotFound, id);
+                return Request.CreateResponse(HttpStatusCode.NotFound);
             }
             return Request.CreateResponse(HttpStatusCode.OK, model);
         }
