@@ -44,7 +44,7 @@ namespace CarDealership.Repository
             CarManufacturer manufacturer = new CarManufacturer();
             using (SqlConnection con = new SqlConnection(connString))
             {
-                using (SqlCommand cmd = new SqlCommand("SELECT * FROM CarManufacturer WHERE id=@id)", con))
+                using (SqlCommand cmd = new SqlCommand("SELECT * FROM CarManufacturer WHERE id=@id", con))
                 {
                     cmd.Parameters.AddWithValue("@id", $"{manufacturer.Id}");
                     con.Open();
@@ -77,7 +77,7 @@ namespace CarDealership.Repository
             id = manufacturer.Id;
             using (SqlConnection con = new SqlConnection(connString))
             {
-                using (SqlCommand cmd = new SqlCommand("UPDATE CarManufacturer SET manufacturer=@manufactuere,country=@country WHERE id=@id)", con))
+                using (SqlCommand cmd = new SqlCommand("UPDATE CarManufacturer SET manufacturer=@manufactuerer,country=@country WHERE id=@id", con))
                 {
                     cmd.Parameters.AddWithValue("@id", $"{id}");
                     cmd.Parameters.AddWithValue("@manufacturer", $"{manufacturer.Name}");
@@ -94,7 +94,7 @@ namespace CarDealership.Repository
         {
             using (SqlConnection con = new SqlConnection(connString))
             {
-                using (SqlCommand cmd = new SqlCommand("DELETE FROM CarManufacturer WHERE id=@id)", con))
+                using (SqlCommand cmd = new SqlCommand("DELETE FROM CarManufacturer WHERE id=@id", con))
                 {
                     cmd.Parameters.AddWithValue("@id", $"{manufacturer.Id}");
                     con.Open();

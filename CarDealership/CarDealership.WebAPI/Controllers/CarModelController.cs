@@ -41,7 +41,7 @@ namespace CarDealership.WebAPI.Controllers
             {
                 return Request.CreateResponse(HttpStatusCode.NotFound);
             }
-            service.DeleteCarManufacturer(model);
+            service.DeleteCarModel(model);
             return Request.CreateResponse(HttpStatusCode.OK, model);
         }
         public HttpResponseMessage PutModel(int id, CarModel model)

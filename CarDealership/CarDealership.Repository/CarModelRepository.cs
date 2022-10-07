@@ -47,7 +47,7 @@ namespace CarDealership.Repository
             CarModel model = new CarModel();
             using (SqlConnection con = new SqlConnection(connString))
             {
-                using (SqlCommand cmd = new SqlCommand("SELECT * FROM CarModel WHERE id=@id)", con))
+                using (SqlCommand cmd = new SqlCommand("SELECT * FROM CarModel WHERE id=@id", con))
                 {
                     cmd.Parameters.AddWithValue("@id", $"{model.Id}");
                     con.Open();
@@ -81,7 +81,7 @@ namespace CarDealership.Repository
             id = model.Id;
             using (SqlConnection con = new SqlConnection(connString))
             {
-                using (SqlCommand cmd = new SqlCommand("UPDATE CarModel SET model=@model,engine=@engine,price=@price,bodyType=@bodyType WHERE id=@id AND manufacturerId=@manufacturerId)", con))
+                using (SqlCommand cmd = new SqlCommand("UPDATE CarModel SET manufacturerId=@manufacturerId,model=@model,engine=@engine,price=@price,bodyType=@bodyType WHERE id=@id", con))
                 {
                     cmd.Parameters.AddWithValue("@id", $"{id}");
                     cmd.Parameters.AddWithValue("@manufacturerId", $"{model.ManufacturerId}");
@@ -100,7 +100,7 @@ namespace CarDealership.Repository
         {
             using (SqlConnection con = new SqlConnection(connString))
             {
-                using (SqlCommand cmd = new SqlCommand("DELETE FROM CarModel WHERE id=@id)", con))
+                using (SqlCommand cmd = new SqlCommand("DELETE FROM CarModel WHERE id=@id", con))
                 {
                     cmd.Parameters.AddWithValue("@id", $"{model.Id}");
                     con.Open();

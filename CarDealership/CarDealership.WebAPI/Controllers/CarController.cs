@@ -33,7 +33,7 @@ namespace CarDealership.WebAPI.Controllers
                 return Request.CreateResponse(HttpStatusCode.NotFound,id);
             }
             manufacturer = service.GetManufacturerById(id);
-            return Request.CreateResponse(HttpStatusCode.OK, manufacturers);
+            return Request.CreateResponse(HttpStatusCode.OK, manufacturer);
         }
 
         public HttpResponseMessage PostManufacturer(CarManufacturer manufacturer)
@@ -49,12 +49,11 @@ namespace CarDealership.WebAPI.Controllers
         
         public HttpResponseMessage PutManufacturer(int id, CarManufacturer manufacturer)
         {
-            CarManufacturer manufacturer = new CarManufacturer();
             if (manufacturer == null)
             {
                 return Request.CreateResponse(HttpStatusCode.NotFound,id);
             }
-            manufacturer = service.PutCarManufacturer(id,manufacturer);
+            service.PutCarManufacturer(id,manufacturer);
             return Request.CreateResponse(HttpStatusCode.OK, manufacturer);
         }
         
