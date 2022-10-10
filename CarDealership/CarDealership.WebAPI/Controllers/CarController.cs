@@ -1,5 +1,7 @@
 ﻿using CarDealership.Model;
+using CarDealership.Model.Common;
 using CarDealership.Service;
+using CarDealership.Service.Common;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -15,7 +17,15 @@ namespace CarDealership.WebAPI.Controllers
 {
     public class CarController : ApiController
     {
-        CarService service = new CarService();
+        private ICarService service { get; set; }
+        public CarController(ICarService service)
+        {
+            this.service = service;
+        }
+        public CarController()
+        {
+            
+        }
         public async Task<HttpResponseMessage> GetManufacturers()
         {
             List<CarManufacturer> manufacturers = await service.GetAllManufacturers();

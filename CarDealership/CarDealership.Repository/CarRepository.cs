@@ -1,4 +1,5 @@
 ﻿using CarDealership.Model;
+using CarDealership.Model.Common;
 using CarDealership.Repository.Common;
 using System;
 using System.Collections.Generic;
@@ -13,9 +14,9 @@ namespace CarDealership.Repository
     public class CarRepository: ICarRepository
     {
         string connString = @"Server=ST-01;Initial Catalog=master;Trusted_connection=true;";
-        List<CarManufacturer> manufacturers = new List<CarManufacturer>();
         public async Task<List<CarManufacturer>> GetAllManufacturers()
         {
+            List<CarManufacturer> manufacturers = new List<CarManufacturer>();
             using (SqlConnection con = new SqlConnection(connString))
             {
                 using (SqlCommand cmd = new SqlCommand("SELECT * FROM CarManufacturer", con))

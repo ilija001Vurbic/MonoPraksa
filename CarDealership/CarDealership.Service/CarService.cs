@@ -1,5 +1,7 @@
 ﻿using CarDealership.Model;
+using CarDealership.Model.Common;
 using CarDealership.Repository;
+using CarDealership.Repository.Common;
 using CarDealership.Service.Common;
 using System;
 using System.Collections.Generic;
@@ -11,7 +13,11 @@ namespace CarDealership.Service
 {
     public class CarService:ICarService
     {
-        CarRepository repository = new CarRepository();
+        public CarService(ICarRepository repository)
+        {
+            this.repository = repository;
+        }
+        private ICarRepository repository { get; set; }
         public async Task<List<CarManufacturer>> GetAllManufacturers() {
             List<CarManufacturer> manufacturers = await repository.GetAllManufacturers();
             return manufacturers;

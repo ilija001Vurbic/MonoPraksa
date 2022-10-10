@@ -1,5 +1,6 @@
 ﻿using CarDealership.Model;
 using CarDealership.Service;
+using CarDealership.Service.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,8 +19,15 @@ namespace CarDealership.WebAPI.Controllers
 {
     public class CarModelController : ApiController
     {
-        // GET: CarModel
-        CarModelService service = new CarModelService();
+        private ICarModelService service { get; set; }
+        public CarModelController(ICarModelService service)
+        {
+            this.service = service;
+        }
+        public CarModelController()
+        {
+
+        }
         [HttpGet]
         public async Task<HttpResponseMessage> GetModels()
         {
