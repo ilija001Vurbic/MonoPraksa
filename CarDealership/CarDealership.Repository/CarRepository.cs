@@ -1,4 +1,5 @@
-﻿using CarDealership.Model;
+﻿using CarDealership.Common;
+using CarDealership.Model;
 using CarDealership.Model.Common;
 using CarDealership.Repository.Common;
 using System;
@@ -14,7 +15,7 @@ namespace CarDealership.Repository
     public class CarRepository: ICarRepository
     {
         string connString = @"Server=ST-01;Initial Catalog=master;Trusted_connection=true;";
-        public async Task<List<CarManufacturer>> GetAllManufacturers()
+        public async Task<List<CarManufacturer>> GetAllManufacturers(CarParameters carManufacturerParameters)
         {
             List<CarManufacturer> manufacturers = new List<CarManufacturer>();
             using (SqlConnection con = new SqlConnection(connString))
@@ -36,7 +37,11 @@ namespace CarDealership.Repository
                         }
                     }
                     con.Close();
-                    return manufacturers;
+                    return manufacturers
+                        .OrderBy(c=>c.Name)
+                        .Skip((carManufacturerParameters.PageNumber-1)*carManufacturerParameters.PageSize)
+                        .Take(carManufacturerParameters.PageSize)
+                        .ToList();
                 }
             }
         }
@@ -74,9 +79,9 @@ namespace CarDealership.Repository
             {
                 using (SqlCommand cmd = new SqlCommand("INSERT INTO CarManufacturer VALUES (@id,@manufacturer,@country)", con))
                 {
-                    cmd.Parameters.AddWithValue("@id", $"{manufacturer.Id}");
-                    cmd.Parameters.AddWithValue("@manufacturer", $"{manufacturer.Name}");
-                    cmd.Parameters.AddWithValue("@country", $"{manufacturer.Country}");
+                    cmd.Parameters.AddWithValue("@id", manufacturer.Id);
+                    cmd.Parameters.AddWithValue("@manufacturer", manufacturer.Name);
+                    cmd.Parameters.AddWithValue("@country", manufacturer.Country);
                     con.Open();
                     cmd.ExecuteNonQuery();
                     con.Close();
@@ -92,9 +97,9 @@ namespace CarDealership.Repository
             {
                 using (SqlCommand cmd = new SqlCommand("UPDATE CarManufacturer SET manufacturer=@manufactuerer,country=@country WHERE id=@id", con))
                 {
-                    cmd.Parameters.AddWithValue("@id", $"{id}");
-                    cmd.Parameters.AddWithValue("@manufacturer", $"{manufacturer.Name}");
-                    cmd.Parameters.AddWithValue("@country", $"{manufacturer.Country}");
+                    cmd.Parameters.AddWithValue("@id", id);
+                    cmd.Parameters.AddWithValue("@manufacturer", manufacturer.Name);
+                    cmd.Parameters.AddWithValue("@country", manufacturer.Country);
                     con.Open();
                     cmd.ExecuteNonQuery();
                     con.Close();

@@ -1,4 +1,5 @@
 ﻿using CarDealership.Repository;
+using AutoMapper;
 using CarDealership.Repository.Common;
 using Autofac;
 using System;
@@ -13,6 +14,9 @@ using CarDealership.Service;
 using CarDealership.Service.Common;
 using Autofac.Integration.WebApi;
 using System.Reflection;
+using CarDealership.Model;
+using CarDealership.Model.Common;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace CarDealership.WebAPI
 {
@@ -26,6 +30,23 @@ namespace CarDealership.WebAPI
             builder.RegisterType<CarModelRepository>().As<ICarModelRepositoryCommon>();
             builder.RegisterType<CarService>().As<ICarService>();
             builder.RegisterType<CarModelService>().As<ICarModelService>();
+            builder.Register(context => new MapperConfiguration(cfg =>
+            {
+                //Register Mapper Profile
+                cfg.CreateMap<CarModelRest,CarModel>();
+                cfg.CreateMap<CarModel, CarModelRest>();
+            }
+            )).AsSelf().SingleInstance();
+
+            builder.Register(c =>
+            {
+                //This resolves a new context that can be used later.
+                var context = c.Resolve<IComponentContext>();
+                var cfg = context.Resolve<MapperConfiguration>();
+                return cfg.CreateMapper(context.Resolve);
+            })
+            .As<IMapper>()
+            .InstancePerLifetimeScope();
             builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
             builder.RegisterWebApiModelBinderProvider();
             var container = builder.Build();

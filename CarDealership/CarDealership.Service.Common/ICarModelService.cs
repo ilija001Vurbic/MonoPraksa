@@ -1,4 +1,5 @@
-﻿using CarDealership.Model;
+﻿using CarDealership.Common;
+using CarDealership.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace CarDealership.Service.Common
 {
     public interface ICarModelService
     {
-        Task<List<CarModel>> GetAllModels();
+        Task<List<CarModel>> GetAllModels(CarParameters carParameters);
         Task<CarModel> GetModelById(int id);
         Task PostCarModel(CarModelRest modelRest);
         Task PutCarModel(int id, CarModel model);

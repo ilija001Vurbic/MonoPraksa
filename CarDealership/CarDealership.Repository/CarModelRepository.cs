@@ -1,4 +1,5 @@
-﻿using CarDealership.Model;
+﻿using CarDealership.Common;
+using CarDealership.Model;
 using CarDealership.Repository.Common;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ namespace CarDealership.Repository
     {
         string connString = @"Server=ST-01;Initial Catalog=master;Trusted_connection=true;";
         
-        public async Task<List<CarModel>> GetAllModels()
+        public async Task<List<CarModel>> GetAllModels(CarParameters carParameters)
         {
             using (SqlConnection con = new SqlConnection(connString))
             {
@@ -39,7 +40,10 @@ namespace CarDealership.Repository
                         }
                     }
                     con.Close();
-                    return models;
+                    return models.OrderBy(c => c.Model)
+                        .Skip((carParameters.PageNumber - 1) * carParameters.PageSize)
+                        .Take(carParameters.PageSize)
+                        .ToList(); ;
                 }
             }
         }
@@ -80,11 +84,11 @@ namespace CarDealership.Repository
             {
                 using (SqlCommand cmd = new SqlCommand("INSERT INTO CarModel VALUES (@id,@manufacturerId,@model,@engine,@price)", con))
                 {
-                    cmd.Parameters.AddWithValue("@id", $"{model.Id}");
-                    cmd.Parameters.AddWithValue("@manufacturerId", $"{model.ManufacturerId}");
-                    cmd.Parameters.AddWithValue("@model", $"{model.Model}");
-                    cmd.Parameters.AddWithValue("@engine", $"{model.Engine}");
-                    cmd.Parameters.AddWithValue("@price", $"{model.Price}");
+                    cmd.Parameters.AddWithValue("@id", model.Id);
+                    cmd.Parameters.AddWithValue("@manufacturerId", model.ManufacturerId);
+                    cmd.Parameters.AddWithValue("@model", model.Model);
+                    cmd.Parameters.AddWithValue("@engine", model.Engine);
+                    cmd.Parameters.AddWithValue("@price", model.Price);
                     con.Open();
                     cmd.ExecuteNonQuery();
                     con.Close();
@@ -99,12 +103,12 @@ namespace CarDealership.Repository
             {
                 using (SqlCommand cmd = new SqlCommand("UPDATE CarModel SET manufacturerId=@manufacturerId,model=@model,engine=@engine,price=@price,bodyType=@bodyType WHERE id=@id", con))
                 {
-                    cmd.Parameters.AddWithValue("@id", $"{id}");
-                    cmd.Parameters.AddWithValue("@manufacturerId", $"{model.ManufacturerId}");
-                    cmd.Parameters.AddWithValue("@model", $"{model.Model}");
-                    cmd.Parameters.AddWithValue("@engine", $"{model.Engine}");
-                    cmd.Parameters.AddWithValue("@price", $"{model.Price}");
-                    cmd.Parameters.AddWithValue("@bodyType", $"{model.BodyType}");
+                    cmd.Parameters.AddWithValue("@id", id);
+                    cmd.Parameters.AddWithValue("@manufacturerId", model.ManufacturerId);
+                    cmd.Parameters.AddWithValue("@model", model.Model);
+                    cmd.Parameters.AddWithValue("@engine",model.Engine);
+                    cmd.Parameters.AddWithValue("@price",model.Price);
+                    cmd.Parameters.AddWithValue("@bodyType", model.BodyType);
                     con.Open();
                     cmd.ExecuteNonQuery();
                     con.Close();

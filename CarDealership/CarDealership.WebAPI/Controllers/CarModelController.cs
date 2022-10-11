@@ -1,4 +1,6 @@
-﻿using CarDealership.Model;
+﻿using AutoMapper;
+using CarDealership.Common;
+using CarDealership.Model;
 using CarDealership.Service;
 using CarDealership.Service.Common;
 using System;
@@ -20,18 +22,20 @@ namespace CarDealership.WebAPI.Controllers
     public class CarModelController : ApiController
     {
         private ICarModelService service { get; set; }
-        public CarModelController(ICarModelService service)
+        private IMapper mapper { get; set; }
+        public CarModelController(ICarModelService service, IMapper mapper)
         {
             this.service = service;
+            this.mapper = mapper;
         }
         public CarModelController()
         {
 
         }
         [HttpGet]
-        public async Task<HttpResponseMessage> GetModels()
+        public async Task<HttpResponseMessage> GetModels(CarParameters carParameters)
         {
-            List<CarModel> models = await service.GetAllModels();
+            List<CarModel> models = await service.GetAllModels(carParameters);
             List<CarModelRest> modelsRest = MapToRest(models);
             if (models == null)
             {
@@ -48,7 +52,7 @@ namespace CarDealership.WebAPI.Controllers
             }
             foreach (CarModel model in models)
             {
-                CarModelRest modelRest = new CarModelRest(model.Id, model.ManufacturerId, model.Model, model.Engine, model.Price);
+                CarModelRest modelRest = mapper.Map<CarModelRest>(model);
                 modelsRest.Add(modelRest);
             }
             return modelsRest;
@@ -57,11 +61,12 @@ namespace CarDealership.WebAPI.Controllers
         public async Task<HttpResponseMessage> GetModelById(int id)
         {
             CarModel model = await service.GetModelById(id);
-            if (model == null)
+            CarModelRest carModel = mapper.Map<CarModelRest>(model);
+            if (carModel == null)
             {
                 return Request.CreateResponse(HttpStatusCode.NotFound);
             }
-            return Request.CreateResponse(HttpStatusCode.OK, model);
+            return Request.CreateResponse(HttpStatusCode.OK, carModel);
         }
         [HttpDelete]
         public async Task<HttpResponseMessage> DeleteModel(CarModel model)
@@ -71,7 +76,8 @@ namespace CarDealership.WebAPI.Controllers
                 return Request.CreateResponse(HttpStatusCode.NotFound);
             }
             service.DeleteCarModel(model);
-            return Request.CreateResponse(HttpStatusCode.OK, model);
+            CarModelRest carModel = mapper.Map<CarModelRest>(model);
+            return Request.CreateResponse(HttpStatusCode.OK, carModel);
         }
         [HttpPut]
         public async Task<HttpResponseMessage> PutModel(int id, CarModel model)
@@ -81,7 +87,8 @@ namespace CarDealership.WebAPI.Controllers
                 return Request.CreateResponse(HttpStatusCode.NotFound);
             }
             service.PutCarModel(id,model);
-            return Request.CreateResponse(HttpStatusCode.OK, model);
+            CarModelRest carModel = mapper.Map<CarModelRest>(model);
+            return Request.CreateResponse(HttpStatusCode.OK, carModel);
         }
         [HttpPost]
         public async Task<HttpResponseMessage> PostModel(CarModelRest modelRest)
@@ -91,7 +98,8 @@ namespace CarDealership.WebAPI.Controllers
                 return Request.CreateResponse(HttpStatusCode.NotFound);
             }
             service.PostCarModel(modelRest);
-            return Request.CreateResponse(HttpStatusCode.OK, modelRest);
+            CarModel carModel = mapper.Map<CarModel>(modelRest);
+            return Request.CreateResponse(HttpStatusCode.OK, carModel);
         }
        
     }

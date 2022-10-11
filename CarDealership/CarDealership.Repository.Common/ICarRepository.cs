@@ -1,4 +1,5 @@
-﻿using CarDealership.Model;
+﻿using CarDealership.Common;
+using CarDealership.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace CarDealership.Repository.Common
 {
     public interface ICarRepository
     {
-        Task<List<CarManufacturer>> GetAllManufacturers();
+        Task<List<CarManufacturer>> GetAllManufacturers(CarParameters carManufacturerParameters);
         Task<CarManufacturer> GetManufacturerById(int id);
         Task<CarManufacturer> PostCarManufacturer(CarManufacturer manufacturer);
         Task<CarManufacturer> PutCarManufacturer(int id, CarManufacturer manufacturer);

@@ -1,4 +1,6 @@
-﻿using CarDealership.Model;
+﻿using AutoMapper;
+using CarDealership.Common;
+using CarDealership.Model;
 using CarDealership.Model.Common;
 using CarDealership.Service;
 using CarDealership.Service.Common;
@@ -18,6 +20,7 @@ namespace CarDealership.WebAPI.Controllers
     public class CarController : ApiController
     {
         private ICarService service { get; set; }
+        public IMapper mapper { get; set; }
         public CarController(ICarService service)
         {
             this.service = service;
@@ -26,9 +29,9 @@ namespace CarDealership.WebAPI.Controllers
         {
             
         }
-        public async Task<HttpResponseMessage> GetManufacturers()
+        public async Task<HttpResponseMessage> GetManufacturers(CarParameters carManufacturerParameters)
         {
-            List<CarManufacturer> manufacturers = await service.GetAllManufacturers();
+            List<CarManufacturer> manufacturers = await service.GetAllManufacturers(carManufacturerParameters);
             if (manufacturers == null)
             {
                 return Request.CreateResponse(HttpStatusCode.NotFound);
