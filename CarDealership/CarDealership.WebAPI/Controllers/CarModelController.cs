@@ -29,19 +29,11 @@ namespace CarDealership.WebAPI.Controllers
             this.mapper = mapper;
         }
         [HttpGet]
-        public async Task<HttpResponseMessage> GetAllModels(int pageNumber = 1, int pageSize = 5)
+        public async Task<HttpResponseMessage> GetAllModels(int pageNumber = 1, int pageSize = 5, string sortBy="model", string sortOrder="ascending", DateTime? madeBefore=null, DateTime? madeAfter=null, bool hasBodyType=false)
         {
-            //string sortBy,string sortOrder, DateTime? madeBefore, DateTime? madeAfter, bool hasBodyType
-
-            //sortBy = "model";
-            //sortOrder = "ascending";
-
-            //madeBefore = null;
-            //madeAfter = null;
-            //hasBodyType = false;
             Paging paging = new Paging(pageNumber,pageSize);
-            //Sorting sorting = new Sorting(sortBy, sortOrder);
-            //Filtering filtering = new Filtering(madeBefore,madeAfter,hasBodyType);
+            Sorting sorting = new Sorting(sortBy, sortOrder);
+            Filtering filtering = new Filtering(madeBefore,madeAfter,hasBodyType);
             List<CarModel> models = await service.GetAllModels(paging);
             List<CarModelRest> modelsRest = MapToRest(models);
             if (models == null)

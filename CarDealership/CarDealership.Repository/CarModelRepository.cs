@@ -24,27 +24,23 @@ namespace CarDealership.Repository
             {
                 queryBuilder.Append("SELECT * FROM CarModel ");
                 SqlCommand cmd = new SqlCommand(queryBuilder.ToString(), con);
-                /*
                 if (filtering.MadeBefore != null || filtering.MadeAfter != null || filtering.HasBodyType == true)
                 {
-                    queryBuilder.AppendLine("WHERE @dateOfManufacturing < @madeBefore");
-                    cmd.Parameters.AddWithValue("@dateOfManufacturing", model.ManufacturingDate);
-                    cmd.Parameters.AddWithValue("@madeBefore", filtering.MadeBefore);
+                    queryBuilder.AppendLine("WHERE dateOfManufacturing < " + filtering.madeBefore +" ");
                 }
                 if (sorting.SortBy == "Model")
                 {
-                    queryBuilder.AppendLine("ORDER BY @model");
-                    cmd.Parameters.AddWithValue("@model", model.Model);
+                    queryBuilder.AppendLine(" ORDER BY model;");
                 }
                 if (sorting.SortOrder == "ascending")
                 {
-                    queryBuilder.AppendLine("asc");
+                    queryBuilder.AppendLine(" asc;");
                 }
                 if (sorting.SortOrder == "descending")
                 {
-                    queryBuilder.AppendLine("desc");
+                    queryBuilder.AppendLine(" desc;");
                 }
-                */
+
 
                 int offset = (paging.PageNumber - 1) * paging.PageSize;
 
