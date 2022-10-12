@@ -10,7 +10,7 @@ namespace CarDealership.Service.Common
 {
     public interface ICarModelService
     {
-        Task<List<CarModel>> GetAllModels(CarParameters carParameters);
+        Task<List<CarModel>> GetAllModels(Paging paging);
         Task<CarModel> GetModelById(int id);
         Task PostCarModel(CarModelRest modelRest);
         Task PutCarModel(int id, CarModel model);

@@ -15,11 +15,12 @@ namespace CarDealership.Repository
     public class CarRepository: ICarRepository
     {
         string connString = @"Server=ST-01;Initial Catalog=master;Trusted_connection=true;";
-        public async Task<List<CarManufacturer>> GetAllManufacturers(CarParameters carManufacturerParameters)
+        public async Task<List<CarManufacturer>> GetAllManufacturers(Paging paging,Sorting sorting,Filtering filtering)
         {
             List<CarManufacturer> manufacturers = new List<CarManufacturer>();
             using (SqlConnection con = new SqlConnection(connString))
             {
+                
                 using (SqlCommand cmd = new SqlCommand("SELECT * FROM CarManufacturer", con))
                 { 
                     cmd.CommandType = CommandType.Text;
@@ -37,11 +38,7 @@ namespace CarDealership.Repository
                         }
                     }
                     con.Close();
-                    return manufacturers
-                        .OrderBy(c=>c.Name)
-                        .Skip((carManufacturerParameters.PageNumber-1)*carManufacturerParameters.PageSize)
-                        .Take(carManufacturerParameters.PageSize)
-                        .ToList();
+                    return manufacturers;
                 }
             }
         }
@@ -121,6 +118,5 @@ namespace CarDealership.Repository
                 }
             }
         }
-        
     }
 }

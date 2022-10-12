@@ -29,9 +29,12 @@ namespace CarDealership.WebAPI.Controllers
         {
             
         }
-        public async Task<HttpResponseMessage> GetManufacturers(CarParameters carManufacturerParameters)
+        public async Task<HttpResponseMessage> GetManufacturers(string query, int pageSize, int pageNumber, string sortBy, string sortOrder, DateTime madeBefore, DateTime madeAfter, bool hasBodyType)
         {
-            List<CarManufacturer> manufacturers = await service.GetAllManufacturers(carManufacturerParameters);
+            Paging paging = new Paging( pageSize, pageNumber);
+            Sorting sorting = new Sorting(sortBy, sortOrder);
+            Filtering filtering = new Filtering(madeBefore,madeAfter,hasBodyType);
+            List<CarManufacturer> manufacturers = await service.GetAllManufacturers(paging, sorting,filtering);
             if (manufacturers == null)
             {
                 return Request.CreateResponse(HttpStatusCode.NotFound);

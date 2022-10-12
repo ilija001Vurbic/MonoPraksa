@@ -28,14 +28,21 @@ namespace CarDealership.WebAPI.Controllers
             this.service = service;
             this.mapper = mapper;
         }
-        public CarModelController()
-        {
-
-        }
         [HttpGet]
-        public async Task<HttpResponseMessage> GetModels(CarParameters carParameters)
+        public async Task<HttpResponseMessage> GetAllModels(int pageNumber = 1, int pageSize = 5)
         {
-            List<CarModel> models = await service.GetAllModels(carParameters);
+            //string sortBy,string sortOrder, DateTime? madeBefore, DateTime? madeAfter, bool hasBodyType
+
+            //sortBy = "model";
+            //sortOrder = "ascending";
+
+            //madeBefore = null;
+            //madeAfter = null;
+            //hasBodyType = false;
+            Paging paging = new Paging(pageNumber,pageSize);
+            //Sorting sorting = new Sorting(sortBy, sortOrder);
+            //Filtering filtering = new Filtering(madeBefore,madeAfter,hasBodyType);
+            List<CarModel> models = await service.GetAllModels(paging);
             List<CarModelRest> modelsRest = MapToRest(models);
             if (models == null)
             {

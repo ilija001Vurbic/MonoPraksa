@@ -11,7 +11,7 @@ namespace CarDealership.Model
     {
         private object p;
 
-        public CarModel(int id, int manufacturerId, string model, string engine, int price, object p)
+        public CarModel(int id, int manufacturerId, string model, string engine, int price, object p, DateTime manufacturingDate)
         {
             Id = id;
             ManufacturerId = manufacturerId;
@@ -19,6 +19,7 @@ namespace CarDealership.Model
             Engine = engine;
             Price = price;
             this.p = p;
+            ManufacturingDate = manufacturingDate;
         }
         public CarModel()
         {
@@ -30,5 +31,6 @@ namespace CarDealership.Model
         public string Engine { get; set; }
         public int Price { get; set; }
         public string BodyType { get; set; }
+        public DateTime ManufacturingDate { get; set; }
     }
 }

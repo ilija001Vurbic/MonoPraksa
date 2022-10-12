@@ -19,9 +19,9 @@ namespace CarDealership.Service
             this.repository = repository;
         }
         private ICarModelRepositoryCommon repository { get; set; }
-        public async Task<List<CarModel>> GetAllModels(CarParameters carParameters)
+        public async Task<List<CarModel>> GetAllModels(Paging paging)
         {
-            List<CarModel> models = await repository.GetAllModels(carParameters);
+            List<CarModel> models = await repository.GetAllModels(paging);
             return models;
         }
 

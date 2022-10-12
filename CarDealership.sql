@@ -70,9 +70,14 @@ INSERT INTO CarModel VALUES
 (28,(SELECT id FROM CarManufacturer WHERE manufacturer='Volkswagen'),'Arteon','2.0L TSI 4Motion 8AT',25000),
 (29,(SELECT id FROM CarManufacturer WHERE manufacturer='Yugo'),'45A','0.9L OHV I4',500);
 
+select * from CarModel;
+
 select * from CarManufacturer;
 select * from CarModel ORDER BY price DESC;
 
+select * from CarModel ORDER BY id ASC OFFSET 0 ROWS FETCH NEXT 4 ROWS ONLY;
+
+ALTER TABLE CarModel ADD dateOfManufacturing DATE;
 ALTER TABLE CarModel ADD bodyType VARCHAR(15);
 UPDATE CarModel SET bodyType='Sedan' WHERE id=1;
 UPDATE CarModel SET bodyType='Sedan' WHERE id=2;

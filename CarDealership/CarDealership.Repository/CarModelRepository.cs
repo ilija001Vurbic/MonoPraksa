@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,14 +16,49 @@ namespace CarDealership.Repository
     {
         string connString = @"Server=ST-01;Initial Catalog=master;Trusted_connection=true;";
         
-        public async Task<List<CarModel>> GetAllModels(CarParameters carParameters)
+        public async Task<List<CarModel>> GetAllModels(Paging paging)
         {
+            StringBuilder queryBuilder = new StringBuilder();
+            CarModel model = new CarModel();
             using (SqlConnection con = new SqlConnection(connString))
             {
-                using (SqlCommand cmd = new SqlCommand("SELECT * FROM CarModel", con))
+                queryBuilder.Append("SELECT * FROM CarModel ");
+                SqlCommand cmd = new SqlCommand(queryBuilder.ToString(), con);
+                /*
+                if (filtering.MadeBefore != null || filtering.MadeAfter != null || filtering.HasBodyType == true)
                 {
+                    queryBuilder.AppendLine("WHERE @dateOfManufacturing < @madeBefore");
+                    cmd.Parameters.AddWithValue("@dateOfManufacturing", model.ManufacturingDate);
+                    cmd.Parameters.AddWithValue("@madeBefore", filtering.MadeBefore);
+                }
+                if (sorting.SortBy == "Model")
+                {
+                    queryBuilder.AppendLine("ORDER BY @model");
+                    cmd.Parameters.AddWithValue("@model", model.Model);
+                }
+                if (sorting.SortOrder == "ascending")
+                {
+                    queryBuilder.AppendLine("asc");
+                }
+                if (sorting.SortOrder == "descending")
+                {
+                    queryBuilder.AppendLine("desc");
+                }
+                */
+
+                int offset = (paging.PageNumber - 1) * paging.PageSize;
+
+                queryBuilder.Append("ORDER BY id ASC ");
+
+                queryBuilder.Append("OFFSET " + offset + " ROWS ");
+                //cmd.Parameters.AddWithValue("@PageNumber", (paging.PageNumber - 1) * paging.PageSize);
+                queryBuilder.AppendLine("FETCH NEXT " + paging.PageSize + " ROWS ONLY;");
+                //cmd.Parameters.AddWithValue("@PageSize", paging.PageSize);
+                using (cmd)
+                {
+
                     List<CarModel> models = new List<CarModel>();
-                    cmd.CommandType = CommandType.Text;
+                    cmd.CommandText = queryBuilder.ToString();
                     con.Open();
                     using (SqlDataReader sdr = cmd.ExecuteReader())
                     {
@@ -40,10 +76,7 @@ namespace CarDealership.Repository
                         }
                     }
                     con.Close();
-                    return models.OrderBy(c => c.Model)
-                        .Skip((carParameters.PageNumber - 1) * carParameters.PageSize)
-                        .Take(carParameters.PageSize)
-                        .ToList(); ;
+                    return models;
                 }
             }
         }
@@ -79,16 +112,17 @@ namespace CarDealership.Repository
         }
         public async Task<CarModel> PostCarModel(CarModelRest modelRest)
         {
-            CarModel model = new CarModel(modelRest.Id,modelRest.ManufacturerId,modelRest.Model,modelRest.Engine,modelRest.Price,null);
+            CarModel model = new CarModel(modelRest.Id,modelRest.ManufacturerId,modelRest.Model,modelRest.Engine,modelRest.Price,null,modelRest.ManufacturingDate);
             using (SqlConnection con = new SqlConnection(connString))
             {
-                using (SqlCommand cmd = new SqlCommand("INSERT INTO CarModel VALUES (@id,@manufacturerId,@model,@engine,@price)", con))
+                using (SqlCommand cmd = new SqlCommand("INSERT INTO CarModel VALUES (@id,@manufacturerId,@model,@engine,@price,@dateOfManufacturing)", con))
                 {
                     cmd.Parameters.AddWithValue("@id", model.Id);
                     cmd.Parameters.AddWithValue("@manufacturerId", model.ManufacturerId);
                     cmd.Parameters.AddWithValue("@model", model.Model);
                     cmd.Parameters.AddWithValue("@engine", model.Engine);
                     cmd.Parameters.AddWithValue("@price", model.Price);
+                    cmd.Parameters.AddWithValue("@dateOfManufacturing", model.ManufacturingDate);
                     con.Open();
                     cmd.ExecuteNonQuery();
                     con.Close();
@@ -129,5 +163,36 @@ namespace CarDealership.Repository
                 }
             }
         }
+        //private void Sort(IEnumerable<CarModel> models, string orderByQueryString)
+        //{
+        //    if (!models.Any())
+        //        return;
+        //    if(string.IsNullOrWhiteSpace(orderByQueryString))
+        //    {
+        //        models = models.OrderBy(c => c.Model);
+        //        return;
+        //    }
+        //    var modelParams = orderByQueryString.Trim().Split(',');
+        //    var propInfos = typeof(CarModel).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+        //    var orderQueryBuilder = new StringBuilder();
+        //    foreach(var param in modelParams)
+        //    {
+        //        if (string.IsNullOrWhiteSpace(param))
+        //            continue;
+        //        var propFromQueryName = param.Split(' ')[0];
+        //        var objectProperty = propInfos.FirstOrDefault(pi => pi.Name.Equals(propFromQueryName, StringComparison.InvariantCultureIgnoreCase));
+        //        if (objectProperty == null)
+        //            continue;
+        //        var sortingOrder = param.EndsWith(" desc") ? "descending" : "ascending";
+        //        orderQueryBuilder.Append($"{objectProperty.Name.ToString()} {sortingOrder},");
+        //    }
+        //    var orderQuery = orderQueryBuilder.ToString().TrimEnd(',', ' ');
+        //    if (string.IsNullOrWhiteSpace(orderQuery))
+        //    {
+        //        models = models.OrderBy(c => c.Model);
+        //        return;
+        //    }
+        //    models = models.OrderBy(orderQuery);
+        //}
     }
 }

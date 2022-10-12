@@ -22,5 +22,10 @@ namespace CarDealership.Common
                 _pageSize = (value > maxPageSize) ? maxPageSize : value;
             }
         }
+        public string OrderBy { get; set; }
+        public CarParameters()
+        {
+            OrderBy = "dateOfManufacturing";
+        }
     }
 }

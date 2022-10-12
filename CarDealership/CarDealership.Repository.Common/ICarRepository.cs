@@ -10,7 +10,7 @@ namespace CarDealership.Repository.Common
 {
     public interface ICarRepository
     {
-        Task<List<CarManufacturer>> GetAllManufacturers(CarParameters carManufacturerParameters);
+        Task<List<CarManufacturer>> GetAllManufacturers(Paging paging,Sorting sorting, Filtering filtering);
         Task<CarManufacturer> GetManufacturerById(int id);
         Task<CarManufacturer> PostCarManufacturer(CarManufacturer manufacturer);
         Task<CarManufacturer> PutCarManufacturer(int id, CarManufacturer manufacturer);

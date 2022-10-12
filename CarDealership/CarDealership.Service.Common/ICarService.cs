@@ -10,7 +10,7 @@ namespace CarDealership.Service.Common
 {
     public interface ICarService
     {
-        Task<List<CarManufacturer>> GetAllManufacturers(CarParameters carManufacturerParameters);
+        Task<List<CarManufacturer>> GetAllManufacturers(Paging paging, Sorting sorting, Filtering filtering);
         Task<CarManufacturer> GetManufacturerById(int id);
         Task PostCarManufacturer(CarManufacturer manufacturer);
         Task PutCarManufacturer(int id, CarManufacturer manufacturer);
