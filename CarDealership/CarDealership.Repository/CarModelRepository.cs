@@ -16,7 +16,7 @@ namespace CarDealership.Repository
     {
         string connString = @"Server=ST-01;Initial Catalog=master;Trusted_connection=true;";
         
-        public async Task<List<CarModel>> GetAllModels(Paging paging)
+        public async Task<List<CarModel>> GetAllModels(Paging paging, Sorting sorting, Filtering filtering)
         {
             StringBuilder queryBuilder = new StringBuilder();
             CarModel model = new CarModel();
@@ -26,7 +26,7 @@ namespace CarDealership.Repository
                 SqlCommand cmd = new SqlCommand(queryBuilder.ToString(), con);
                 if (filtering.MadeBefore != null || filtering.MadeAfter != null || filtering.HasBodyType == true)
                 {
-                    queryBuilder.AppendLine("WHERE dateOfManufacturing < " + filtering.madeBefore +" ");
+                    queryBuilder.AppendLine("WHERE dateOfManufacturing < " + filtering.MadeBefore +" ");
                 }
                 if (sorting.SortBy == "Model")
                 {

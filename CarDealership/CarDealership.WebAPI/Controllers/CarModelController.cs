@@ -34,7 +34,7 @@ namespace CarDealership.WebAPI.Controllers
             Paging paging = new Paging(pageNumber,pageSize);
             Sorting sorting = new Sorting(sortBy, sortOrder);
             Filtering filtering = new Filtering(madeBefore,madeAfter,hasBodyType);
-            List<CarModel> models = await service.GetAllModels(paging);
+            List<CarModel> models = await service.GetAllModels(paging,sorting,filtering);
             List<CarModelRest> modelsRest = MapToRest(models);
             if (models == null)
             {
