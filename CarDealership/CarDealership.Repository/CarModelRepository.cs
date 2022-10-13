@@ -19,7 +19,6 @@ namespace CarDealership.Repository
         public async Task<List<CarModel>> GetAllModels(Paging paging, Sorting sorting, Filtering filtering)
         {
             StringBuilder queryBuilder = new StringBuilder();
-            CarModel model = new CarModel();
             using (SqlConnection con = new SqlConnection(connString))
             {
                 queryBuilder.Append("SELECT * FROM CarModel ");
@@ -30,26 +29,25 @@ namespace CarDealership.Repository
                 }
                 if (sorting.SortBy == "Model")
                 {
-                    queryBuilder.AppendLine(" ORDER BY model;");
+                    queryBuilder.AppendLine(" ORDER BY model ");
                 }
-                if (sorting.SortOrder == "ascending")
+                if (sorting.SortOrder == "asc")
                 {
-                    queryBuilder.AppendLine(" asc;");
+                    queryBuilder.AppendLine(" ASC;");
                 }
-                if (sorting.SortOrder == "descending")
+                if (sorting.SortOrder == "desc")
                 {
-                    queryBuilder.AppendLine(" desc;");
+                    queryBuilder.AppendLine(" DESC;");
                 }
-
 
                 int offset = (paging.PageNumber - 1) * paging.PageSize;
 
-                queryBuilder.Append("ORDER BY id ASC ");
-
-                queryBuilder.Append("OFFSET " + offset + " ROWS ");
-                //cmd.Parameters.AddWithValue("@PageNumber", (paging.PageNumber - 1) * paging.PageSize);
-                queryBuilder.AppendLine("FETCH NEXT " + paging.PageSize + " ROWS ONLY;");
-                //cmd.Parameters.AddWithValue("@PageSize", paging.PageSize);
+                if(paging.PageNumber!=0 || paging.PageSize!=0)
+                {
+                queryBuilder.Append(" ORDER BY id ASC ");
+                queryBuilder.Append(" OFFSET " + offset + " ROWS ");
+                queryBuilder.AppendLine(" FETCH NEXT " + paging.PageSize + " ROWS ONLY;");
+                }
                 using (cmd)
                 {
 

@@ -29,7 +29,7 @@ namespace CarDealership.WebAPI.Controllers
             this.mapper = mapper;
         }
         [HttpGet]
-        public async Task<HttpResponseMessage> GetAllModels(int pageNumber = 1, int pageSize = 5, string sortBy="model", string sortOrder="ascending", DateTime? madeBefore=null, DateTime? madeAfter=null, bool hasBodyType=false)
+        public async Task<HttpResponseMessage> GetAllModels(int pageNumber = 1, int pageSize = 5, string sortBy="model", string sortOrder="asc", DateTime? madeBefore=null, DateTime? madeAfter=null, bool hasBodyType=false)
         {
             Paging paging = new Paging(pageNumber,pageSize);
             Sorting sorting = new Sorting(sortBy, sortOrder);
