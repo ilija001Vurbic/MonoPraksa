@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="CarDealership.css">
+    <script type="text/javascript" src="CarDealership.js"></script>
+    <title>Car dealership</title>
+    
+</head>
+<center>
+<body onload='document.form1.text1.focus()'>
+    <header>
+        <h1>Car dealership</h1>
+    </header>
+    <main>
+        <p>Some of the cars that we sell:</p>
+        <table id="dataTable">
+            <tr>
+              <th>Manufacturer</th>
+              <th>Country of origin</th>
+              <th>Model</th>
+              <th>Starting price in Euros</th>
+              <th>Specifications of the car</th>
+            </tr>
+            <tr>
+              <td>Alfa Romeo</td>
+              <td>Italy</td>
+              <td>Giulia</td>
+              <td>45000</td>
+              <td><a rel="stylesheet" href="https://www.alfaromeousa.com/cars/giulia/specs">Link for specs</a></td>
+            </tr>
+            <tr>
+              <td>BMW</td>
+              <td>Germany</td>
+              <td>X6</td>
+              <td>100000</td>
+              <td><a rel="stylesheet" href="https://www.cardekho.com/bmw/x6/specs">Link for specs</a></td>
+            </tr>
+            <tr>
+                <td>Dodge</td>
+                <td>United States of America</td>
+                <td>Charger</td>
+              <td>37000</td>
+              <td><a rel="stylesheet" href="https://www.caranddriver.com/dodge/charger-2023/specs">Link for specs</a></td>
+            </tr>
+            <tr>
+                <td>Honda</td>
+                <td>Japan</td>
+                <td>Civic</td>
+              <td>40000</td>
+              <td><a rel="stylesheet" href="https://www.cardekho.com/honda/civic/specs">Link for specs</a></td>
+            </tr>
+          </table>
+          <br>
+          <p>Interested in one of the cars? Leave your contact information and we will check availability of the car your interested in.</p>
+          <form action="" name="form1">
+            <div>
+                <label for="name">Name</label>
+                <input type="text" id="name">
+            </div>
+            <div>
+                <label for="name">Surname</label>
+                <input type="text" id="surname">
+            </div>
+            <div>
+                E-mail<input type='text' name='text1' id="email"/>
+            </div>
+            <div>
+                <label for="name">What model are you interested in?</label>
+                <select name="name" id="car">
+                    <option value="Alfa romeo Giulia">Alfa Romeo Giulia</option>
+                    <option value="BMW X6">BMW X6</option>
+                    <option value="Dodge Charger">Dodge Charger</option>
+                    <option value="Honda Civic">Honda Civic</option>
+                </select>
+            </div>
+        </form>
+        <input type="button" id="button" onclick="add();" value="Add">
+        <br>
+        <div >
+            <p>Interested customers:</p>
+            <table id="output" >
+                <thead><td>Name</td><td>Surname</td><td>E-mail</td><td>Car</td></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </main>
+    <footer></footer>
+</body>
+</center>
+</html>
