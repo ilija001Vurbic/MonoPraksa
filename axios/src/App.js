@@ -1,6 +1,9 @@
 import './App.css';
 import GetData from './GetData';
 import GetSingleData from './GetSingleData';
+import UpdateData from './UpdateData';
+import PostData from './PostData';
+
 
 function App() {
   return (
@@ -8,6 +11,8 @@ function App() {
       <header className="App-header">
         <GetData />
         <GetSingleData />
+        <UpdateData />
+        <PostData />
       </header>
     </div>
   );
